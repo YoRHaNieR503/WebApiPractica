@@ -31,6 +31,39 @@ namespace WebApiPractica.Controllers
             return Ok(listadoEquipo);
         }
 
+        [HttpGet]
+        [Route("GetById/{id}")]
+
+        public IActionResult Get(int id)
+        {
+            equipos? equipo = (from e in _equiposContexto.equipos where e.id_equipos == id select e).FirstOrDefault();
+
+            if (equipo == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(equipo);
+        }
+
+        [HttpPost]
+        [Route("Add")]
+
+        public IActionResult GuardarEquipo([FromBody] equipos equipo) 
+        {
+            try
+            {
+
+                _equiposContexto.equipos.Add(equipo);
+                _equiposContexto.SaveChanges();
+                return Ok(equipo);
+
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 
 
